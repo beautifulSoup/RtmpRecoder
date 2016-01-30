@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">RtmpRecorder</string>
+    <string name="title_activity_record">RecordActivity</string>
+</resources>
