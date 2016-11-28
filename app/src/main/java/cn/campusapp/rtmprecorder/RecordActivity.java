@@ -84,7 +84,7 @@ public class RecordActivity extends Activity implements OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ffmpeg_link = getIntent().getStringExtra(KEY_STREAM_URL);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         setContentView(R.layout.activity_record);
 
@@ -143,8 +143,13 @@ public class RecordActivity extends Activity implements OnClickListener {
         layoutParam = new RelativeLayout.LayoutParams(prev_rw, prev_rh);
         layoutParam.topMargin = (int) (1.0 * bg_screen_by * screenHeight / bg_height);
         layoutParam.leftMargin = (int) (1.0 * bg_screen_bx * screenWidth / bg_width);
-
-        cameraDevice = Camera.open();
+        try {
+            cameraDevice = Camera.open();
+        } catch (Exception e){
+            Log.e(LOG_TAG, "camera open fail, if it's occupied by other applications");
+            finish();
+            return;
+        }
         Log.i(LOG_TAG, "cameara open");
         cameraView = new CameraView(this, cameraDevice);
         topLayout.addView(cameraView, layoutParam);
@@ -383,6 +388,7 @@ public class RecordActivity extends Activity implements OnClickListener {
             mHolder.addCallback(CameraView.this);
             mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
             mCamera.setPreviewCallback(CameraView.this);
+            mCamera.setDisplayOrientation(90);
         }
 
         @Override
